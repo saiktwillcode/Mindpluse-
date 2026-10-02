@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>MindPulse AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+:root{--bg:#fff7dc;--fg:#1d1700;--mu:#675a1e;--cd:rgba(255,255,255,.7);--bd:rgba(140,100,0,.3);--y:#c98a00;--y2:#ffc400;--on:#1d1700;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0904;--fg:#fff6d0;--mu:#bdb07a;--cd:rgba(255,205,40,.06);--bd:rgba(255,200,40,.24);--y:#ffc400;--y2:#ffe066}}
+:root[data-theme="dark"]{--bg:#0a0904;--fg:#fff6d0;--mu:#bdb07a;--cd:rgba(255,205,40,.06);--bd:rgba(255,200,40,.24);--y:#ffc400;--y2:#ffe066}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 "Avenir Next",Segoe UI,system-ui,sans-serif}
+body:before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(60% 40% at 80% 0,rgba(255,196,0,.18),transparent),radial-gradient(50% 40% at 0 100%,rgba(255,140,0,.12),transparent)}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;margin:0 0 .4em;line-height:1.1}
+h1{font-size:clamp(2.2rem,6vw,4.4rem)}h2{font-size:clamp(1.7rem,3.6vw,2.6rem)}h3{font-size:1.2rem}
+.w{max-width:1100px;margin:auto;padding:0 20px}section{padding:72px 0}.mu{color:var(--mu)}.s{font-size:.85rem}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;backdrop-filter:blur(14px);background:var(--cd);border-bottom:1px solid var(--bd)}
+nav .w{display:flex;align-items:center;gap:14px;padding-top:10px;padding-bottom:10px;flex-wrap:wrap}
+nav a{color:var(--fg);text-decoration:none;font-size:.9rem}nav .lg{font-weight:800;margin-right:auto;font-family:Georgia,serif;font-size:1.1rem}
+.g{background:var(--cd);border:1px solid var(--bd);border-radius:20px;padding:20px;backdrop-filter:blur(14px)}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}.grid2{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));margin-top:16px}
+.btn{position:relative;overflow:hidden;border:0;border-radius:14px;padding:13px 22px;font:700 15px inherit;font-family:inherit;cursor:pointer;color:var(--on);background:linear-gradient(135deg,var(--y2),#ff9f1a);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35),0 8px 24px -10px var(--y2);transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:inset 0 0 0 1px rgba(255,255,255,.5),0 10px 34px -4px var(--y2)}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.btn.o{background:transparent;color:var(--fg);box-shadow:inset 0 0 0 1.5px var(--y)}.btn.gr{background:linear-gradient(135deg,#8cf5ac,#2ec46c)}.btn.wa{background:linear-gradient(135deg,#ffb347,#ff7a18)}.btn.cr{background:linear-gradient(135deg,#ff8a8a,#e5303a);color:#fff}.btn.sm{padding:8px 14px;font-size:13px}
+.rip{position:absolute;border-radius:50%;background:rgba(255,255,255,.55);transform:scale(0);animation:rp .6s ease-out forwards;pointer-events:none}@keyframes rp{to{transform:scale(1);opacity:0}}
+:focus-visible{outline:3px solid var(--y2);outline-offset:3px}
+.stage{position:relative;height:min(48vh,430px)}#core{width:100%;height:100%;display:block}
+.fl{position:absolute;left:var(--lx);top:var(--ly);padding:4px 12px;border-radius:99px;font-size:.78rem;border:1px solid var(--bd);background:var(--cd);backdrop-filter:blur(8px);animation:fy 5s ease-in-out infinite;transform:translate(calc(var(--mx,0)*14px),calc(var(--my,0)*10px))}
+@keyframes fy{50%{margin-top:-10px}}
+.ht{text-align:center;padding-bottom:20px}.ht p{max-width:600px;margin:12px auto 22px;font-size:1.1rem}.cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+textarea,select,input[type=file],dialog input,#gate input{width:100%;background:var(--cd);color:var(--fg);border:1px solid var(--bd);border-radius:14px;padding:14px;font:inherit}
+textarea{min-height:130px;resize:vertical}label{font-weight:600;display:block;margin-bottom:6px}
+.chip{border:1px solid var(--bd);background:transparent;color:var(--fg);border-radius:99px;padding:5px 12px;margin:3px;font:inherit;font-size:.85rem;cursor:pointer}.chip:hover,.chip.on{background:var(--y2);color:var(--on)}.chip.n{border-style:dashed}
+.err{color:#ff6a5e;font-weight:600;min-height:1.4em}
+#steps{list-style:none;padding:0;margin:14px 0}#steps li{opacity:.35;padding:4px 0;transition:.3s}#steps li.ok{opacity:1;color:var(--y)}
+.k{text-align:center}.k b{font-size:2.4rem;font-family:Georgia,serif;color:var(--y)}.k small{display:block}
+.bar{height:8px;border-radius:8px;background:var(--bd);overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--y2),#ff9f1a);transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.mb{display:grid;grid-template-columns:1fr auto;gap:2px 8px;margin:10px 0;font-size:.9rem}.mb .bar{grid-column:1/-1}
+.rg{width:190px;display:block;margin:auto}.tr{fill:none;stroke:var(--bd);stroke-width:10}.ring{fill:none;stroke:var(--y2);stroke-width:10;stroke-linecap:round;stroke-dasharray:339.3;stroke-dashoffset:339.3;transition:stroke-dashoffset 1.3s;transform:rotate(-90deg);transform-origin:70px 70px;filter:drop-shadow(0 0 6px var(--y2))}
+.rt{font:700 34px Georgia,serif;fill:var(--fg)}.rs{font-size:11px;fill:var(--mu)}
+dl.dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:14px 0 0}dl.dl dt{color:var(--mu)}dl.dl dd{margin:0;font-weight:600}
+.wheel{position:relative;width:300px;height:300px;margin:auto}.em{position:absolute;width:52px;height:52px;border-radius:50%;border:1px solid var(--bd);background:var(--cd);font-size:22px;cursor:pointer;transition:.25s}.em.on{background:var(--y2);box-shadow:0 0 0 4px rgba(255,196,0,.35)}
+.ed{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:132px;text-align:center;font-size:.78rem;line-height:1.3}
+.tl{display:flex;justify-content:space-between;position:relative;margin:18px 0;gap:4px}.tl:before{content:"";position:absolute;left:5%;right:5%;top:26px;border-top:2px dashed var(--y)}
+.pt{position:relative;background:none;border:0;color:var(--fg);font:inherit;font-size:.72rem;cursor:pointer;text-align:center;animation:pi .5s both;animation-delay:calc(var(--i)*.15s)}.pt span{display:grid;place-items:center;width:46px;height:46px;margin:0 auto 4px;border-radius:50%;background:var(--bg);border:2px solid var(--y);font-size:22px}
+@keyframes pi{from{opacity:0;transform:translateY(10px)}}
+.pill{display:inline-block;padding:3px 12px;border-radius:99px;font-weight:700;color:#1d1700}
+.rec{padding:10px 0;border-bottom:1px solid var(--bd)}.rec b{color:var(--y)}
+table{width:100%;border-collapse:collapse}th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--bd)}td.h{font-weight:700;color:var(--on)}.tw{overflow-x:auto}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}.nd{padding:10px 14px;border-radius:12px;border:1px solid var(--bd);background:var(--cd);font-size:.85rem;transition:.3s}.nd.on{background:var(--y2);color:var(--on);box-shadow:0 0 22px var(--y2);transform:translateY(-4px)}.ar{color:var(--y)}
+.rv{transition:.7s}.js .rv:not(.in){opacity:0;transform:translateY(22px)}
+#orb{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));width:62px;height:62px;border-radius:50%;border:0;cursor:pointer;z-index:20;background:radial-gradient(circle at 35% 30%,#fff6b0,var(--y2) 45%,#ff8a00);box-shadow:0 0 30px var(--y2);animation:pl 2.4s infinite;font-size:24px}
+@keyframes pl{50%{box-shadow:0 0 52px var(--y2);transform:scale(1.07)}}
+#chat{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(92px + env(safe-area-inset-bottom,0px));width:min(360px,calc(100vw - 32px));z-index:20;background:var(--bg);border:1px solid var(--bd);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.4);padding:14px}
+#msgs{height:230px;overflow:auto;display:flex;flex-direction:column;gap:8px;margin:8px 0}.m{max-width:86%;padding:8px 12px;border-radius:14px;font-size:.9rem;animation:pi .3s}.m.b{background:var(--cd);border:1px solid var(--bd)}.m.u{background:var(--y2);color:var(--on);align-self:flex-end}
+.wv{display:inline-flex;gap:3px;align-items:end;height:16px}.wv i{width:3px;background:var(--y);animation:wv 1s infinite ease-in-out}.wv i:nth-child(2){animation-delay:.2s}.wv i:nth-child(3){animation-delay:.4s}.wv i:nth-child(4){animation-delay:.1s}@keyframes wv{0%,100%{height:4px}50%{height:16px}}
+dialog{background:var(--bg);color:var(--fg);border:1px solid var(--bd);border-radius:20px;max-width:560px;width:calc(100vw - 32px)}dialog::backdrop{background:rgba(0,0,0,.6)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.js .rv:not(.in){opacity:1;transform:none}}
+@media(max-width:600px){.fl:nth-of-type(n+4){display:none}section{padding:48px 0}}
+#gate{position:fixed;inset:0;z-index:60;background:var(--bg);display:grid;place-items:center;padding:20px;overflow:auto}#gate:before{content:"";position:absolute;inset:0;background:radial-gradient(50% 50% at 50% 30%,rgba(255,196,0,.25),transparent);pointer-events:none}
+.gc{position:relative;width:min(440px,100%)}#gate label{margin-top:10px}#roles{display:flex;gap:6px;margin:12px 0}#roles button{flex:1;padding:9px;border-radius:12px;border:1px solid var(--bd);background:transparent;color:var(--fg);font:inherit;font-weight:600;cursor:pointer}#roles button.on{background:var(--y2);color:var(--on)}
+</style></head><body>
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gt"><div class="g gc">
+<h2 id="gt">MindPulse AI</h2><p class="mu">Sign in to continue.</p>
+<div id="roles" role="radiogroup" aria-label="Account type"><button type="button" role="radio" data-r="STUDENT" class="on" aria-checked="true">Student</button><button type="button" role="radio" data-r="FACULTY" aria-checked="false">Faculty</button><button type="button" role="radio" data-r="ADMIN" aria-checked="false">Admin</button></div>
+<div id="gnw"><label for="gn">Name (new accounts only)</label><input id="gn" autocomplete="name"></div>
+<label for="ge">Email</label><input id="ge" type="email" autocomplete="username"><label for="gp">Password</label><input id="gp" type="password" autocomplete="current-password">
+<div class="err" id="gerr" role="alert"></div>
+<div class="cta" style="justify-content:flex-start"><button class="btn mag" id="gin">Sign in</button><button class="btn o" id="greg">Create student account</button></div>
+<p><button class="btn gr sm" id="gdemo">Use demo account</button></p>
+<p class="s mu" id="mode"></p><p class="s mu">Demo password: Demo@1234. Faculty and admin accounts are provisioned by an administrator.</p></div></div>
+<nav><div class="w"><a class="lg" href="#top">MindPulse AI</a><a href="#analyze">Analyze</a><a href="#context">Context</a><a href="#faculty">Faculty</a><a href="#privacy">Privacy</a><a href="#pipeline">Pipeline</a><button class="btn o sm" id="auth">Sign in</button><button class="btn o sm" id="tog" aria-label="Toggle light and dark theme">Theme</button></div></nav>
+
+<header id="top"><div class="stage" id="stage"><canvas id="core" aria-hidden="true"></canvas>
+<span class="fl" style="--lx:8%;--ly:18%">Stress</span><span class="fl" style="--lx:76%;--ly:14%">Workload</span><span class="fl" style="--lx:2%;--ly:55%">Engagement</span><span class="fl" style="--lx:78%;--ly:58%">Frustration</span><span class="fl" style="--lx:22%;--ly:84%">Emotion</span><span class="fl" style="--lx:58%;--ly:86%">Academic Experience</span></div>
+<div class="w ht"><h1>Understand the Student.<br>Not Just the Words.</h1><p>Context-aware AI that transforms student feedback into meaningful academic well-being insights.</p>
+<div class="cta"><button class="btn mag" id="c1">Analyze My Experience →</button><button class="btn o mag" id="c2">Explore AI Dashboard</button></div><p class="s mu">Context AI • Explainable • Privacy First</p></div></header>
+
+<section><div class="w"><h2 class="rv">Why scores alone fail students</h2><div class="grid">
+<div class="g rv"><h3>The problem</h3><p class="mu">Feedback, journals and forum posts hold early signs of overload, but "stressed" and "not stressed anymore" look identical to keyword counters.</p></div>
+<div class="g rv"><h3>The approach</h3><p class="mu">Clause-level reading with negation, intensity, hedging and contrast ("but") handling, then workload, engagement and trend analysis.</p></div>
+<div class="g rv"><h3>The result</h3><p class="mu">An explained indicator, an early signal over time and practical next steps, never a diagnosis.</p></div></div></div></section>
+
+<section id="analyze"><div class="w"><h2>Analyze an experience</h2>
+<div class="g"><label for="in">Feedback, journal entry, concern or workload description</label>
+<textarea id="in" placeholder="I have three assignments this week and I am finding it difficult to complete everything before the deadlines."></textarea>
+<p class="s mu" id="pii">Personal identifiers are masked before analysis.</p>
+<div class="cta" style="justify-content:flex-start"><button class="btn mag" id="go">Analyze experience</button><button class="btn gr" id="tryd">Try demo</button></div>
+<div id="dm" style="margin-top:10px" aria-label="Demo responses"></div><div class="err" id="err" role="alert"></div>
+<ol id="steps" hidden></ol></div>
+<div id="res" hidden aria-live="polite"></div></div></section>
+
+<section id="context"><div class="w"><h2 class="rv">Context beats keywords</h2><p class="mu">Live results from the same engine. Same word, different meaning.</p>
+<div class="g rv tw"><table id="ctab"><thead><tr><th>Sentence</th><th>Stress</th><th>Reading</th></tr></thead><tbody></tbody></table></div></div></section>
+
+<section id="faculty"><div class="w"><h2 class="rv">Faculty overview</h2><p class="mu">Aggregated and anonymized. Analysed live from sample responses; upload your own CSV or TXT (one response per line).</p>
+<div class="g rv"><div class="cta" style="justify-content:flex-start;align-items:end"><div style="flex:1;min-width:180px"><label for="fc">Course</label><select id="fc"></select></div><div style="flex:2;min-width:220px"><label for="up">Bulk feedback (.csv, .txt)</label><input type="file" id="up" accept=".csv,.txt,.xlsx"></div><button class="btn wa" id="exp">Export report</button></div><div class="err" id="uerr" role="alert"></div></div>
+<div id="fac"></div></div></section>
+
+<section id="privacy"><div class="w"><h2 class="rv">Privacy first</h2><div class="grid">
+<div class="g rv">🔒<h3>Data protection</h3><p class="mu s">This demo runs fully in your browser. Nothing is sent anywhere.</p></div>
+<div class="g rv">👤<h3>Anonymous analysis</h3><p class="mu s">Identifiers are masked before text reaches the NLP engine.</p></div>
+<div class="g rv">🛡<h3>Aggregated faculty view</h3><p class="mu s">Faculty see cohort patterns, not individual journals.</p></div>
+<div class="g rv">🗑<h3>Data deletion</h3><p class="mu s">Remove your session history at any time.</p><button class="btn cr sm" id="clr">Delete session data</button></div></div>
+<div class="g rv" style="margin-top:16px"><h3>PII detection</h3><label for="pt">Try it</label><textarea id="pt">Hi, I'm Arjun Kumar (ID 21CS1042). Email arjun@college.edu or call +91 98765 43210 about my lab.</textarea><p id="po" style="font-weight:600"></p><div id="pc"></div></div></div></section>
+
+<section id="pipeline"><div class="w"><h2 class="rv">How it flows</h2><div class="g rv"><div class="flow" id="flow"></div><p class="s mu" style="text-align:center">Each stage is a separate function, so the engine can be swapped for a transformer or LLM without touching the interface.</p></div></div></section>
+
+<footer class="w" style="padding-bottom:90px;text-align:center"><p class="mu s">MindPulse AI gives an AI-derived academic experience indicator. It is not a medical or mental-health diagnosis.</p></footer>
+
+<button id="orb" aria-label="Open PulseAI chat">✦</button>
+<div id="chat" hidden><b>PulseAI</b> <span class="wv" aria-hidden="true"><i></i><i></i><i></i><i></i></span><div id="msgs" aria-live="polite"></div><div style="display:flex;gap:8px"><input id="ci" aria-label="Message PulseAI" style="flex:1;border-radius:12px;border:1px solid var(--bd);background:var(--cd);color:var(--fg);padding:10px" placeholder="I have too many assignments…"><button class="btn sm" id="cs">Send</button></div></div>
+<dialog id="dlg"><h3 id="dt"></h3><div id="db"></div><p style="text-align:right"><button class="btn o sm" id="dx">Close</button></p></dialog>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const cl=(x,a=0,b=100)=>Math.max(a,Math.min(b,Math.round(x))),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+/* ---------- NLP engine (swap nlp() for a transformer/LLM later) ---------- */
+const L={stress:/\b(stress(ed|ful)?|anxious|anxiety|overwhelm(ed|ing)|panic\w*|worr(y|ied)|pressure|exhaust(ed|ing)|burn(ed|t)? ?out|nervous)\b/g,
+work:/\b(assignments?|deadlines?|workload|homework|projects?|exams?|too many|backlog|behind|due|submissions?|lab reports?|problem sets?|quiz(zes)?)\b/g,
+frus:/\b(frustrat\w+|annoy\w+|confus\w+|unfair|stuck|difficult\w*|hard|can'?t (understand|follow|figure)|cannot (understand|follow)|struggl\w+|lost|pointless)\b/g,
+pos:/\b(enjoy\w*|interesting|excited|love[ds]?|curious|motivated|engag\w+|fun|helpful|inspiring|great|happy|proud|confident)\b/g,
+neg:/\b(bored|boring|skip\w*|unmotivated|disengag\w+|don'?t care|dropp\w+|absent|zone[ds]? out|give up|giving up)\b/g,
+calm:/\b(manageable|calm|relaxed|fine|okay|easy|comfortable|under control|balanced|coping)\b/g,
+sad:/\b(sad|lonely|hopeless|down|depress\w*|discouraged)\b/g,tech:/\b(wifi|portal|login|server|crash\w*|bug|platform|lms|upload)\b/g};
+const NEG=/(n't|\b(not|no|never|without|hardly|barely|cannot|nothing)\b)/,sg=x=>100*(1-Math.exp(-x/2.2)),Z=()=>({stress:0,work:0,frus:0,pos:0,neg:0,calm:0,sad:0,tech:0,relief:0});
+const WHY={'Academic workload':'Workload pressure was detected because the text refers to several tasks and approaching deadlines.','Technical problems':'Technical friction was detected because the text mentions platform or portal failures.','Course difficulty':'Learning difficulty was detected because the text describes confusion or getting stuck on material.','Positive academic experience':'A positive experience was detected because motivation and comfort cues outweigh pressure cues.','Engagement decline':'Disengagement was detected because the text describes boredom or withdrawing from the course.','General academic experience':'No strong academic signals were found, so the text reads as neutral.'};
+const TOP=[['Assignments',/assignment|project|homework|lab|problem set/],['Deadlines',/deadline|\bdue\b|submission/],['Course difficulty',/difficult|hard|confus|stuck|lost|can'?t (understand|follow)|cannot|proof|struggl/],['Exams',/exam|quiz|test/],['Technical problems',/wifi|portal|login|server|crash|bug|platform|upload/],['Engagement',/bored|skip|motivat|interest|enjoy|engag/]];
+function nlp(text){
+ const low=text.toLowerCase(),cs=low.split(/(?<=[.!?;\n])\s+|\s+(?=(?:but|however|although)\b)/).filter(c=>c.trim()),a=Z(),ev=[];
+ cs.forEach((c,ci)=>{let w=/^(but|however)\b/.test(c.trim())?1.4:1;
+  if(/\b(thought|expected|feared|assumed|worried that)\b/.test(c)&&ci<cs.length-1)w=.25;
+  const fl=/\b(anymore|no longer|any more)\b/.test(c),t=Z(),te=[];
+  for(const k in L)for(const m of c.matchAll(L[k])){
+   const pre=c.slice(0,m.index),p4=pre.split(/\s+/).slice(-4).join(' '),p3=pre.split(/\s+/).slice(-3).join(' ');let v=w;
+   if(/\b(very|extremely|so|really|too|incredibly|totally|completely|super)\b/.test(p3))v*=1.7;
+   if(/\b(slightly|a bit|a little|somewhat|kind of)\b/.test(p4))v*=.5;
+   if(k=='work'&&/(\d+|two|three|four|five|many|multiple|several)\s+(\w+\s+)?$/.test(pre))v*=1.8;
+   const n=NEG.test(p4),o={w:m[0],c:c.trim().slice(0,110),k};
+   if(k=='pos'||k=='calm'){if(n){t[k=='pos'?'neg':'stress']+=v*.7;te.push({...o,w:'not '+m[0],n:1})}else{t[k]+=v;te.push(o)}}
+   else if(n||(fl&&['stress','frus','sad','neg'].includes(k))){t.relief+=v;te.push({...o,w:'not '+m[0],n:1})}
+   else{t[k]+=v;te.push(o)}}
+  if(t.calm>0)t.work*=.3;for(const k in t)a[k]+=t[k];ev.push(...te)});
+ const stress=cl(12+sg(a.stress+.5*a.work+.4*a.frus)*.88-a.calm*5-a.relief*4,5,98),work=cl(8+sg(a.work)*.9-a.relief*3,5,98),frus=cl(8+sg(a.frus)*.9-a.relief*3-a.calm*3,5,98),eng=cl(55+14*a.pos+4*a.calm-16*a.neg-6*a.sad-3*a.frus,5,97),wb=cl(100-.3*stress-.28*work-.2*frus+.1*(eng-50),5,98);
+ const raw={happiness:a.pos+a.relief*.4,calm:a.calm+a.relief*.8,neutral:.7,anxiety:a.stress+.3*a.work,frustration:a.frus,sadness:a.sad+a.neg*.5,overload:Math.max(0,a.work+a.stress-2)*.8},tot=Object.values(raw).reduce((x,y)=>x+y,0)||1,emo={};
+ for(const k in raw)emo[k]=cl(raw[k]/tot*100);
+ const ctx=[['Academic workload',a.work],['Technical problems',a.tech*1.2],['Course difficulty',a.frus],['Positive academic experience',a.pos+a.calm],['Engagement decline',a.neg*1.3+a.sad*.5]].sort((x,y)=>y[1]-x[1]),context=ctx[0][1]>0?ctx[0][0]:'General academic experience';
+ let topics=TOP.filter(x=>x[1].test(low)).map(x=>x[0]);if(!topics.length)topics=['General'];
+ const seen=new Set(),evu=ev.filter(e=>!seen.has(e.w)&&seen.add(e.w)).slice(0,7),mx=Math.max(stress,work,frus);
+ const ng=evu.find(e=>e.n);
+ return{text,stress,work,frus,eng,wb,emo,context,topics,ev:evu,diff:cl(frus+(topics.includes('Course difficulty')?20:0)),intensity:mx>70?'High':mx>45?'Moderate':'Low',conf:evu.length?cl(58+evu.length*7,0,96):52,why:WHY[context]+(ng?` The negated phrase "${ng.w}" was treated as relief, not distress.`:'')}}
+const risk=r=>.35*r.stress+.35*r.work+.3*r.frus;
+function mask(t){const f=[];let o=t;const R=[['email',/[\w.+-]+@[\w-]+\.[\w.-]+/g],['phone',/(?:\+\d{1,3}[\s-]?)?\b\d{5}[\s-]?\d{5}\b|\b\d{3}[\s-]\d{3}[\s-]\d{4}\b/g],['student ID',/\b\d{2}[A-Za-z]{2,4}\d{3,5}\b/g]];
+ R.forEach(([ty,re])=>o=o.replace(re,m=>{f.push({ty,v:m});return'['+ty.toUpperCase().replace(' ','_')+']'}));
+ o=o.replace(/(?:[Mm]y name is|I am|I'm|This is|Prof(?:essor)?\.?|Dr\.?|Mr\.?|Ms\.?|Mrs\.?)\s+([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/g,(m,n)=>{f.push({ty:'name',v:n});return m.replace(n,'[NAME]')});return{out:o,f}}
+/* ---------- data ---------- */
+const DEMO=[['Workload problem','I have three assignments this week and I am finding it difficult to complete everything before the deadlines.'],['Course difficulty','I cannot understand the new topic in OS. I feel lost and frustrated, and the lectures move too fast.'],['Deadline pressure','Two exams and a project are due on the same day. I am really worried and exhausted.'],['Positive experience','I thought I would be stressed, but the workload was manageable and I am enjoying the course.'],['Engagement decline','I am bored in class and I have started skipping lectures. It feels pointless.']];
+const SEED=['I enjoy the data structures course, the lectures are interesting and the pace feels comfortable.','Things are okay. There is a lab report due, but it is manageable.','I have two assignments and a quiz this week and I am a bit worried about the deadlines.','I am really overwhelmed. Three assignments are due and I cannot understand the new topic, it is very frustrating.'];
+const COH=[['Data Structures','Too many assignments and the deadlines are very tight.'],['Data Structures','Trees are interesting but I am stuck on the lab.'],['Data Structures','The course is hard and I feel lost.'],['Data Structures','I enjoy the lectures and feel confident.'],['DBMS','The project is manageable and I am enjoying SQL.'],['DBMS','The portal crashed twice while I tried to upload my submission.'],['DBMS','Normalization is confusing but the instructor is helpful.'],['DBMS','I am not stressed anymore after the extension.'],['OS','Exams and lab reports are all due together, I am exhausted.'],['OS','Scheduling topics are difficult and I am frustrated.'],['OS','I am bored and skipping classes now.'],['OS','The workload is heavy but I am coping, it is fine.'],['Mathematics','The problem sets are easy and I feel calm.'],['Mathematics','I am worried about the exam, I cannot follow the proofs.'],['Mathematics','Great teaching, I am motivated.'],['Mathematics','Too many assignments, I am really overwhelmed.']];
+const EM=[['happiness','😊','Happiness','pos'],['calm','😌','Calm','calm'],['neutral','😐','Neutral',''],['anxiety','😟','Anxiety','stress'],['frustration','😡','Frustration','frus'],['sadness','😞','Sadness','sad'],['overload','😵','Overload','work']];
+const LV=[['Normal','#3ddc84'],['Attention','#ffd400'],['Elevated','#ff9a1f'],['High Signal','#ff5a4d']],ST=['Understanding context…','Detecting emotional signals…','Analyzing academic factors…','Checking trends…','Generating insights…'];
+let hist=[],cur=null,rows=COH.map(([c,t])=>({c,r:nlp(t)}));
+const fmt=d=>d.toLocaleDateString('en',{month:'short',day:'numeric'});
+SEED.forEach((t,i)=>hist.push({l:fmt(new Date(Date.now()-(SEED.length-i)*6048e5)),r:nlp(t)}));
+const face=v=>v<28?'😊':v<38?'😌':v<48?'😐':v<60?'😟':'🔴',lvl=v=>v<30?0:v<45?1:v<60?2:3;
+function sig(){const rs=hist.map(h=>risk(h.r)),last=rs.at(-1),d=last-rs[0],lv=lvl(last),tp={};
+ hist.slice(-2).forEach(h=>h.r.topics.forEach(t=>tp[t]=(tp[t]||0)+1));const top=Object.entries(tp).sort((a,b)=>b[1]-a[1])[0][0].toLowerCase();
+ const head=d>10&&hist.length>2?`⚠ Increasing ${top}-related concerns`:d<-10?'Improving pattern':'Stable pattern';
+ const acts=[['Keep your current routine.'],['Plan the next week early and review your task list.'],['Break work into smaller tasks and talk to your instructor about deadlines.'],['Contact academic support this week and ask about deadline flexibility.']][lv];
+ return{lv,d,head,acts,txt:d>10?'Recent submissions show a growing pattern of difficulty.':'No sharp change across recent submissions.',top}}
+/* ---------- UI helpers ---------- */
+function count(el){const to=+el.dataset.c,t0=performance.now();(function f(t){const p=RM?1:Math.min(1,(t-t0)/1000);el.textContent=Math.round(to*(1-Math.pow(1-p,3)))+(el.dataset.u||'');if(p<1)requestAnimationFrame(f)})(t0)}
+function anim(r=document){setTimeout(()=>{r.querySelectorAll('[data-w]').forEach(i=>i.style.width=i.dataset.w+'%');r.querySelectorAll('[data-o]').forEach(i=>i.style.strokeDashoffset=i.dataset.o);r.querySelectorAll('[data-c]').forEach(count)},60)}
+const dlg=$('#dlg');function dOpen(t,h){$('#dt').textContent=t;$('#db').innerHTML=h;dlg.showModal()}
+const bars=a=>a.map(([n,v])=>`<div class="mb"><span>${n}</span><b>${v}%</b><div class="bar"><i data-w="${v}"></i></div></div>`).join('');
+function recs(r){const o=[];
+ if(r.work>55)o.push(['Break the workload','Divide each assignment into 45–60 minute tasks and schedule them.'],['Prioritize deadlines','Finish the nearest deadline first, then re-rank the rest.']);
+ if(r.frus>45||r.topics.includes('Course difficulty'))o.push(['Get targeted help','Bring one specific question to office hours or a peer tutor.']);
+ if(r.stress>60)o.push(['Protect your pace','Take a 10 minute break after each focus block.']);
+ if(r.eng<40)o.push(['Reconnect with the course','Pick one topic you find interesting and link your next task to it.']);
+ if(r.wb>70)o.push(['Keep what works','Your routine is working. Note what helped so you can repeat it.']);
+ o.push(['Academic support','Consider contacting the course instructor or advisor if this pattern continues.']);return o.slice(0,3)}
+function render(){const r=cur,s=sig(),L2=LV[s.lv],top=Object.entries(r.emo).filter(x=>x[0]!='neutral').sort((a,b)=>b[1]-a[1]),rc=recs(r);
+ $('#res').hidden=false;$('#res').innerHTML=`<div class="grid" style="margin-top:16px">${[['Stress',r.stress],['Workload pressure',r.work],['Frustration',r.frus],['Engagement',r.eng]].map(([n,v])=>`<div class="g k"><b data-c="${v}" data-u="%">0%</b><small class="mu">${n}</small></div>`).join('')}</div>
+<div class="grid2"><div class="g"><h3>Academic Experience Index</h3><svg viewBox="0 0 140 140" class="rg" role="img" aria-label="Index ${r.wb} out of 100"><circle cx="70" cy="70" r="54" class="tr"/><circle cx="70" cy="70" r="54" class="ring" data-o="${339.3*(1-r.wb/100)}"/><text x="70" y="70" text-anchor="middle" class="rt" data-c="${r.wb}">0</text><text x="70" y="90" text-anchor="middle" class="rs">/ 100</text></svg>
+<p class="mu s" style="text-align:center">AI-derived academic experience indicator, not a medical or mental-health diagnosis.</p>${bars([['Emotional stability',100-r.stress],['Workload balance',100-r.work],['Academic engagement',r.eng],['Frustration level',r.frus],['Learning difficulty',r.diff]])}</div>
+<div class="g"><h3>Why did AI detect this?</h3><p>${esc(r.why)}</p><div>${r.ev.map((e,i)=>`<button class="chip${e.n?' n':''}" data-act="chip" data-i="${i}">${esc(e.w)}</button>`).join('')||'<span class="mu s">No strong evidence phrases</span>'}</div><p class="s mu" id="cx" aria-live="polite">Select a phrase to see the sentence it came from.</p>
+<dl class="dl"><dt>Detected context</dt><dd>${r.context}</dd><dt>Emotional signals</dt><dd>${top.slice(0,2).filter(x=>x[1]>0).map(x=>x[0]).join(' + ')||'neutral'}</dd><dt>Intensity</dt><dd>${r.intensity}</dd><dt>Confidence</dt><dd>${r.conf}%</dd><dt>Main factors</dt><dd>${r.topics.join(', ')}</dd></dl></div></div>
+<div class="grid2"><div class="g"><h3>Emotion intelligence</h3><div class="wheel" role="group" aria-label="Emotion wheel">${EM.map((e,i)=>{const a=i/7*6.283-1.57,p=r.emo[e[0]];return`<button class="em" data-act="emo" data-k="${e[0]}" aria-label="${e[2]} ${p}%" style="left:${150+Math.cos(a)*108-26}px;top:${150+Math.sin(a)*108-26}px;transform:scale(${.85+p/100*.7})">${e[1]}</button>`}).join('')}<div class="ed" id="ed" aria-live="polite"></div></div></div>
+<div class="g"><h3>Early Signal AI</h3><span class="pill" style="background:${L2[1]}">${L2[0]}</span> <b>${s.head}</b><p class="mu">${s.txt} Contributing topic: ${s.top}.</p>
+<div class="tl">${hist.map((h,i)=>`<button class="pt" style="--i:${i}" data-act="pt" data-i="${i}"><span>${face(risk(h.r))}</span>${h.l}</button>`).join('')}</div><p class="s" id="tp" aria-live="polite">Hover or focus a point for details.</p><p><b>Recommended actions:</b> ${s.acts}</p><p class="s mu">Pattern indicator only, not a mental-health diagnosis.</p></div></div>
+<div class="g" style="margin-top:16px"><h3>AI suggestions</h3>${rc.map((x,i)=>`<div class="rec"><b>0${i+1}</b> ${x[0]}<div class="mu s">${x[1]}</div></div>`).join('')}<div class="cta" style="justify-content:flex-start;margin-top:14px"><button class="btn gr" data-act="plan">Create study plan</button><button class="btn o" data-act="resrc">View resources</button><button class="btn wa" data-act="sup">Contact academic support</button></div></div>`;
+ anim($('#res'));selEmo(top[0][1]>0?top[0][0]:'neutral')}
+function selEmo(k){$$('.em').forEach(b=>b.classList.toggle('on',b.dataset.k==k));const e=EM.find(x=>x[0]==k),r=cur,p=r.emo[k],prev=hist.length>1?hist.at(-2).r.emo[k]:null,d=prev==null?'':p-prev,ph=r.ev.find(x=>x.k==e[3]&&!x.n);
+ $('#ed').innerHTML=`<b>${e[1]} ${e[2]}</b><br>${p}% confidence<br>${d===''?'':d>0?'▲ +'+d:d<0?'▼ '+d:'■ no change'} vs previous<br><span class="mu">Topics: ${r.topics.slice(0,2).join(', ')}</span><br><i>${ph?'“'+esc(ph.c.slice(0,60))+'”':'no supporting phrase'}</i>`}
+/* ---------- actions ---------- */
+async function run(){const raw=$('#in').value.trim(),er=$('#err'),b=$('#go');
+ if(!raw){er.textContent='Write a few words about your academic experience first.';$('#in').focus();return}
+ if(raw.length<12){er.textContent='Add a bit more detail so the analysis has context (12+ characters).';return}
+ er.textContent='';b.disabled=true;b.textContent='Analyzing…';const{out,f}=mask(raw);
+ $('#pii').textContent=f.length?`Privacy filter masked ${f.length} item(s) (${[...new Set(f.map(x=>x.ty))].join(', ')}) before analysis.`:'Privacy filter: no personal identifiers found.';
+ const ls=$('#steps');ls.hidden=false;ls.innerHTML=ST.map(s=>`<li>${s}</li>`).join('');
+ for(const li of $$('#steps li')){await sleep(RM?50:420);li.classList.add('ok');li.textContent+=' ✓'}
+ try{cur=await analyzeRemote(out);hist.forEach(h=>{if(h.l=='Now')h.l='Earlier'});hist.push({l:'Now',r:cur});if(hist.length>7)hist.shift();render();$('#res').scrollIntoView({behavior:RM?'auto':'smooth'})}
+ catch(e){er.textContent='Analysis failed: '+e.message}finally{ls.hidden=true;b.disabled=false;b.textContent='Analyze experience'}}
+async function analyzeRemote(t){if(mode=='local'||!tok){$('#pii').textContent+=' Analyzed by the in-browser engine (demo mode).';return nlp(t)}
+ try{const r=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},body:JSON.stringify({text:t})});
+ if(r.status==401){tok=usr=null;authUi();$('#gerr').textContent='Session expired. Sign in again.';return nlp(t)}
+ const j=await r.json();if(!r.ok)throw new Error(j.error||'HTTP '+r.status);$('#pii').textContent+=' Analyzed by the Java API.';return j}
+ catch(e){$('#pii').textContent+=' Backend unreachable, used the in-browser engine.';return nlp(t)}}
+function lv(v){return v>=60?'High':v>=38?'Medium':'Low'}
+function renderFac(){const c=$('#fc').value,R=c=='All courses'?rows:rows.filter(x=>x.c==c),n=R.length||1,av=k=>Math.round(R.reduce((s,x)=>s+x.r[k],0)/n);
+ const iss={};R.forEach(x=>{let t=x.r.topics[0];if(!['Assignments','Deadlines','Course difficulty','Technical problems'].includes(t))t='Other';iss[t]=(iss[t]||0)+1});
+ const em={};EM.forEach(e=>em[e[2]]=Math.round(R.reduce((s,x)=>s+x.r.emo[e[0]],0)/n));
+ const courses=[...new Set(rows.map(x=>x.c))],hi=R.filter(x=>risk(x.r)>=60).length;
+ $('#fac').innerHTML=`<div class="grid" style="margin-top:16px">${[['Responses analyzed',R.length,''],['Avg workload',av('work'),'%'],['Stress signal',av('stress'),'%'],['Engagement',av('eng'),'%'],['Frustration',av('frus'),'%'],['High-signal responses',hi,'']].map(([n,v,u])=>`<div class="g k"><b data-c="${v}" data-u="${u}">0</b><small class="mu">${n}</small></div>`).join('')}</div>
+<div class="grid2"><div class="g"><h3>Common academic issues</h3>${bars(Object.entries(iss).sort((a,b)=>b[1]-a[1]).map(([k,v])=>[k,Math.round(v/n*100)]))}</div><div class="g"><h3>Emotion distribution</h3>${bars(Object.entries(em))}</div></div>
+<div class="g tw" style="margin-top:16px"><h3>Course heatmap</h3><table><thead><tr><th>Course</th><th>Workload</th><th>Stress</th><th>Engagement</th></tr></thead><tbody>${courses.map(k=>{const q=rows.filter(x=>x.c==k),m=a=>Math.round(q.reduce((s,x)=>s+x.r[a],0)/q.length);return`<tr><td>${esc(k)} <span class="mu s">(${q.length})</span></td>${[['work',m('work')],['stress',m('stress')],['eng',m('eng')]].map(([a,v])=>`<td class="h" style="background:rgba(255,196,0,${(.12+v/100*.8).toFixed(2)})">${lv(v)}</td>`).join('')}</tr>`}).join('')}</tbody></table></div>`;anim($('#fac'))}
+function report(){const R=rows,n=R.length||1,av=k=>Math.round(R.reduce((s,x)=>s+x.r[k],0)/n);return`MINDPULSE AI - AGGREGATED REPORT\nGenerated: ${new Date().toLocaleString()}\nResponses analyzed: ${R.length}\nAvg workload: ${av('work')}%\nStress signal: ${av('stress')}%\nEngagement: ${av('eng')}%\nFrustration: ${av('frus')}%\nHigh-signal responses: ${R.filter(x=>risk(x.r)>=60).length}\n\nBy course:\n`+[...new Set(R.map(x=>x.c))].map(k=>{const q=R.filter(x=>x.c==k);return`- ${k}: workload ${lv(q.reduce((s,x)=>s+x.r.work,0)/q.length)}, stress ${lv(q.reduce((s,x)=>s+x.r.stress,0)/q.length)}, ${q.length} responses`}).join('\n')+'\n\nIndicator only, not a diagnosis. No individual text included.'}
+function upload(f){const er=$('#uerr');er.textContent='';if(!f)return;
+ if(!/\.(csv|txt)$/i.test(f.name)){er.textContent=`Unsupported file type "${f.name.split('.').pop()}". Use .csv or .txt (export XLSX sheets as CSV).`;return}
+ const rd=new FileReader();rd.onerror=()=>er.textContent='The file could not be read. Try again.';
+ rd.onload=()=>{let ln=String(rd.result).split(/\r?\n/).map(l=>l.trim()).filter(Boolean);if(ln.length&&/^(text|feedback|comment|response)/i.test(ln[0]))ln.shift();
+  ln=ln.map(l=>/\.csv$/i.test(f.name)?l.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).sort((a,b)=>b.length-a.length)[0].replace(/^"|"$/g,''):l).filter(l=>l.length>8);
+  if(!ln.length){er.textContent='No usable responses found. Put one response per line.';return}
+  ln.slice(0,5000).forEach(t=>rows.push({c:'Uploaded',r:nlp(mask(t).out)}));
+  if(![...$('#fc').options].some(o=>o.value=='Uploaded'))$('#fc').add(new Option('Uploaded','Uploaded'));
+  $('#fc').value='Uploaded';renderFac();er.style.color='var(--y)';er.textContent=`${ln.length} responses analyzed.`};rd.readAsText(f)}
+const KB=[[/\b(hi|hello|hey)\b/,'Hi, I am PulseAI. Tell me about your week and I will help you plan it.'],[/assign|too many|workload|overwhelm/,'I can help you organize them. What are the deadlines and estimated completion times? List each task with its due date.'],[/deadline|due/,'List deadlines nearest-first. Work on the earliest in a 45 minute focus block, then rest 10 minutes.'],[/exam|test|quiz/,'Split topics across the days left, start with the hardest, and end each day with 15 minutes of self-testing.'],[/stress|anxious|worr|tired/,'That sounds heavy. Write every task down, then finish the smallest first. If it keeps building, your advisor or counselling service can help.'],[/bored|motivat|interest/,'Link the topic to something you care about, or study with a peer. If the course feels disconnected, tell your instructor.']];
+function say(t,c){const d=document.createElement('div');d.className='m '+c;d.textContent=t;$('#msgs').append(d);$('#msgs').scrollTop=9e4;return d}
+async function ask(){const q=$('#ci').value.trim();if(!q)return;$('#ci').value='';say(q,'u');const t=say('…','b');await sleep(RM?50:700);t.textContent=(KB.find(k=>k[0].test(q.toLowerCase()))||[0,'Tell me more: which course, what is due, and how much time do you have?'])[1]}
+/* ---------- wiring ---------- */
+document.addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(!t)return;const a=t.dataset.act;
+ if(a=='chip'){const x=cur.ev[+t.dataset.i];$$('.chip').forEach(c=>c.classList.remove('on'));t.classList.add('on');$('#cx').textContent=`${x.n?'Negated, treated as relief':'Evidence'} in: “${x.c}”`}
+ if(a=='emo')selEmo(t.dataset.k);
+ if(a=='plan'){const n=cur.work>70?4:cur.work>45?3:2,s=['List every task with its due date and rank by deadline.',`Two 45 minute focus blocks on the nearest deadline (10 minute breaks).`,'Split the next task into three subtasks and finish the first.'];if(n>2)s.push('Review progress; start the third task with one focus block.');if(n>3)s.push('If still behind, message your instructor about deadline flexibility.');dOpen('Your study plan','<ol>'+s.map((x,i)=>`<li>Day ${i+1}: ${x}</li>`).join('')+'</ol>')}
+ if(a=='resrc')dOpen('Resources','<ul><li>Time-blocking: schedule tasks in 45–60 minute blocks.</li><li>Pomodoro method for steady focus.</li><li>Peer tutoring and instructor office hours for stuck topics.</li><li>Your institution’s academic advising and counselling services.</li></ul>');
+ if(a=='sup'){const m=`Subject: Request for academic support\n\nHello,\n\nI am finding my current workload difficult to manage (${cur.topics.join(', ').toLowerCase()}). Could we discuss deadlines or additional support?\n\nThank you.`;dOpen('Message to academic support',`<textarea id="sm" readonly style="min-height:160px">${esc(m)}</textarea><p><button class="btn sm" data-act="copy">Copy message</button> <span id="cp" class="s"></span></p>`)}
+ if(a=='copy'){const el=$('#sm')||$('#rp');el.select();(navigator.clipboard?navigator.clipboard.writeText(el.value):Promise.reject()).then(()=>$('#cp').textContent='Copied.').catch(()=>$('#cp').textContent='Select the text and copy it manually.')}});
+document.addEventListener('mouseover',e=>{const p=e.target.closest('.pt');if(p)pt(p)});document.addEventListener('focusin',e=>{const p=e.target.closest('.pt');if(p)pt(p)});
+function pt(p){const h=hist[+p.dataset.i],r=h.r;$('#tp').textContent=`${h.l}: ${face(risk(r))} workload ${r.work}%, engagement ${r.eng}%, topics: ${r.topics.join(', ')}.`}
+document.addEventListener('pointerdown',e=>{const b=e.target.closest('.btn');if(!b||b.disabled)return;const r=b.getBoundingClientRect(),s=document.createElement('span'),d=Math.max(r.width,r.height)*2;s.className='rip';s.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;b.append(s);setTimeout(()=>s.remove(),600)});
+if(!RM)document.addEventListener('mousemove',e=>{const b=e.target.closest&&e.target.closest('.mag');$$('.mag').forEach(x=>{if(x!==b)x.style.transform=''});if(b){const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.25}px)`}});
+$('#go').onclick=run;$('#in').addEventListener('keydown',e=>{if(e.key=='Enter'&&(e.ctrlKey||e.metaKey))run()});
+$('#dm').innerHTML=DEMO.map((d,i)=>`<button class="chip" data-d="${i}">${d[0]}</button>`).join('');
+$('#dm').onclick=e=>{const b=e.target.closest('[data-d]');if(b){$('#in').value=DEMO[b.dataset.d][1];run()}};
+$('#tryd').onclick=()=>{$('#in').value=DEMO[0][1];run()};
+$('#c1').onclick=()=>{$('#analyze').scrollIntoView({behavior:'smooth'});setTimeout(()=>$('#in').focus(),500)};$('#c2').onclick=()=>{if($('#faculty').hidden)dOpen('Faculty dashboard','<p>The faculty dashboard needs a faculty or admin account. Sign out and choose the Faculty tab (demo: faculty@demo.edu).</p>');else $('#faculty').scrollIntoView({behavior:'smooth'})};
+$('#fc').innerHTML=['All courses',...new Set(COH.map(x=>x[0]))].map(c=>`<option>${c}</option>`).join('');$('#fc').onchange=renderFac;$('#up').onchange=e=>upload(e.target.files[0]);
+$('#exp').onclick=()=>dOpen('Aggregated report',`<textarea id="rp" readonly style="min-height:260px">${esc(report())}</textarea><p><button class="btn sm" data-act="copy">Copy report</button> <span id="cp" class="s"></span></p>`);
+$('#clr').onclick=()=>{hist=[];SEED.forEach((t,i)=>hist.push({l:fmt(new Date(Date.now()-(SEED.length-i)*6048e5)),r:nlp(t)}));cur=null;$('#res').hidden=true;$('#in').value='';dOpen('Session data deleted','<p>Your entries and results were removed from this session.</p>')};
+function pii(){const{out,f}=mask($('#pt').value);$('#po').textContent=out;$('#pc').innerHTML=f.map(x=>`<span class="chip">${x.ty}: ${esc(x.v)}</span>`).join('')||'<span class="mu s">No identifiers found.</span>'}$('#pt').oninput=pii;pii();
+$('#dx').onclick=()=>dlg.close();
+$('#ctab tbody').innerHTML=['I am stressed.','I am not stressed anymore.','I thought I was going to be stressed, but the workload was manageable.'].map(s=>{const r=nlp(s);return`<tr><td>${s}</td><td><b>${r.stress}%</b></td><td>${r.context}${r.ev.some(e=>e.n)?' (negation handled)':''}</td></tr>`}).join('');
+const PL=['Student input','Privacy / PII filter','Context-aware NLP','Emotion + sentiment','Academic patterns','Trend analysis','Early signal','Explainability','Recommendations','Dashboards'];
+$('#flow').innerHTML=PL.map((p,i)=>`<span class="nd">${p}</span>${i<9?'<span class="ar" aria-hidden="true">→</span>':''}`).join('');
+let fi=0;if(!RM)setInterval(()=>{$$('.nd').forEach((n,i)=>n.classList.toggle('on',i==fi));fi=(fi+1)%PL.length},900);
+$('#orb').onclick=()=>{const c=$('#chat');c.hidden=!c.hidden;if(!c.hidden&&!$('#msgs').children.length)say('Hi, I am PulseAI. Ask me about assignments, deadlines or exams.','b')};
+$('#cs').onclick=ask;$('#ci').addEventListener('keydown',e=>{if(e.key=='Enter')ask()});
+$('#tog').onclick=()=>{const r=document.documentElement,d=getComputedStyle(r).getPropertyValue('--bg').trim()=='#0a0904';r.dataset.theme=d?'light':'dark';setCol()};
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});$$('.rv').forEach(x=>io.observe(x));
+renderFac();
+/* ---------- auth ---------- */
+let tok=null,usr=null,mode='api',want='STUDENT';
+try{usr=JSON.parse(sessionStorage.getItem('mp_u')||'null');if(usr){tok=sessionStorage.getItem('mp_t');mode=sessionStorage.getItem('mp_m')||'api'}}catch(e){}
+const DU={'student@demo.edu':['Demo Student','STUDENT'],'faculty@demo.edu':['Demo Faculty','FACULTY'],'admin@demo.edu':['Demo Admin','ADMIN']},LOC={};
+function authUi(){const ok=!!usr,f=ok&&['FACULTY','ADMIN'].includes(usr.role);$('#gate').hidden=ok;$$('nav,header,section,footer,#orb').forEach(x=>x.inert=!ok);
+ $('#auth').textContent=ok?`${usr.name} (${usr.role.toLowerCase()}) · Sign out`:'Sign in';$('#faculty').hidden=!f;const fl=document.querySelector('nav a[href="#faculty"]');if(fl)fl.hidden=!f;
+ $('#mode').textContent=ok&&mode=='local'?'Demo mode: no server connected, accounts are simulated in this browser.':''}
+function setWant(r){want=r;$$('#roles button').forEach(b=>{b.setAttribute('aria-checked',b.dataset.r==r);b.classList.toggle('on',b.dataset.r==r)});$('#greg').hidden=$('#gnw').hidden=r!='STUDENT';$('#gerr').textContent=''}
+$('#roles').onclick=e=>{const b=e.target.closest('button');if(b)setWant(b.dataset.r)};
+async function api(p,b){try{const r=await fetch(p,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});let j=null;try{j=await r.json()}catch(e){}return j===null?{off:1}:{ok:r.ok,j}}catch(e){return{off:1}}}
+function localAuth(reg,b){const em=b.email.toLowerCase(),bad=m=>({ok:false,j:{error:m}});
+ if(reg){if(!b.name)return bad('Enter your name.');if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))return bad('Enter a valid email address.');if(b.password.length<8)return bad('Password must be at least 8 characters.');if(DU[em]||LOC[em])return bad('An account with this email already exists.');LOC[em]=[b.name,'STUDENT',b.password];return{ok:true,j:{token:'demo',name:b.name,role:'STUDENT'}}}
+ const d=DU[em]?[...DU[em],'Demo@1234']:LOC[em];return(!d||d[2]!==b.password)?bad('Invalid email or password.'):{ok:true,j:{token:'demo',name:d[0],role:d[1]}}}
+async function gAuth(reg){const er=$('#gerr');er.textContent='';const b={email:$('#ge').value.trim(),password:$('#gp').value};if(reg)b.name=$('#gn').value.trim();
+ if(!b.email||!b.password){er.textContent='Enter your email and password.';return}
+ const btn=$(reg?'#greg':'#gin');btn.disabled=true;let x=mode=='local'?{off:1}:await api('/api/auth/'+(reg?'register':'login'),b);
+ if(x.off){mode='local';x=localAuth(reg,b)}else mode='api';btn.disabled=false;
+ if(!x.ok){er.textContent=x.j.error||'Request failed.';return}
+ if(!reg&&x.j.role!=want){er.textContent=`This is a ${x.j.role.toLowerCase()} account. Choose the ${x.j.role.toLowerCase()} tab.`;return}
+ tok=x.j.token;usr={name:x.j.name,role:x.j.role};try{sessionStorage.setItem('mp_t',tok);sessionStorage.setItem('mp_u',JSON.stringify(usr));sessionStorage.setItem('mp_m',mode)}catch(e){}
+ $('#gp').value='';authUi();window.scrollTo(0,0)}
+$('#gin').onclick=()=>gAuth(false);$('#greg').onclick=()=>gAuth(true);$('#gp').addEventListener('keydown',e=>{if(e.key=='Enter')gAuth(false)});
+$('#gdemo').onclick=()=>{$('#ge').value={STUDENT:'student',FACULTY:'faculty',ADMIN:'admin'}[want]+'@demo.edu';$('#gp').value='Demo@1234';gAuth(false)};
+$('#auth').onclick=()=>{tok=usr=null;mode='api';try{sessionStorage.clear()}catch(e){}$('#res').hidden=true;setWant('STUDENT');authUi()};
+setWant('STUDENT');authUi();
+/* ---------- 3D neural core ---------- */
+const cv=$('#core'),cx=cv.getContext('2d'),N=innerWidth<700?55:130,pts=[...Array(N)].map((_,i)=>{const y=1-2*(i+.5)/N,r=Math.sqrt(1-y*y),th=i*2.39996;return[Math.cos(th)*r,y,Math.sin(th)*r]});
+let W,H,mx=0,my=0,t=0,col='#ffc400';
+function setCol(){col=getComputedStyle(document.documentElement).getPropertyValue('--y2').trim()||col}
+function size(){const d=devicePixelRatio||1;W=cv.clientWidth;H=cv.clientHeight;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0)}
+function frame(){if(!RM)t+=.004;cx.clearRect(0,0,W,H);
+ const R=Math.min(W,H)*.34*(1+.025*Math.sin(t*9)),ry=t+mx*.6,rx=.3+my*.4,c1=Math.cos(ry),s1=Math.sin(ry),c2=Math.cos(rx),s2=Math.sin(rx),X=W/2,Y=H/2;
+ const g=cx.createRadialGradient(X,Y,0,X,Y,R*1.5);g.addColorStop(0,'rgba(255,196,0,.28)');g.addColorStop(1,'rgba(255,196,0,0)');cx.fillStyle=g;cx.fillRect(0,0,W,H);
+ const P=pts.map(p=>{const x=p[0]*c1+p[2]*s1;let z=-p[0]*s1+p[2]*c1;const y=p[1]*c2-z*s2;z=p[1]*s2+z*c2;const k=1/(1.8-z*.5)*1.4;return[X+x*R*k,Y+y*R*k,z]});
+ cx.strokeStyle=col;cx.lineWidth=.7;const lim=R*.42;
+ for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){const dx=P[i][0]-P[j][0],dy=P[i][1]-P[j][1],d=dx*dx+dy*dy;if(d<lim*lim){cx.globalAlpha=(1-Math.sqrt(d)/lim)*.5;cx.beginPath();cx.moveTo(P[i][0],P[i][1]);cx.lineTo(P[j][0],P[j][1]);cx.stroke()}}
+ cx.fillStyle=col;P.forEach(p=>{cx.globalAlpha=.35+.65*(p[2]+1)/2;cx.beginPath();cx.arc(p[0],p[1],1.4+p[2]*1.2+1.2,0,6.283);cx.fill()});
+ [[1.5,.3,.5],[1.35,.38,-.7]].forEach(([k,e,a],i)=>{cx.globalAlpha=.45;cx.lineWidth=1.2;cx.beginPath();cx.ellipse(X,Y,R*k,R*k*e,a+Math.sin(t+i)*.1,0,6.283);cx.stroke();const q=t*(2+i)+i*3,ex=Math.cos(q)*R*k,ey=Math.sin(q)*R*k*e,ca=Math.cos(a+Math.sin(t+i)*.1),sa=Math.sin(a+Math.sin(t+i)*.1);cx.globalAlpha=1;cx.beginPath();cx.arc(X+ex*ca-ey*sa,Y+ex*sa+ey*ca,4,0,6.283);cx.fill()});
+ cx.globalAlpha=1;if(!RM)requestAnimationFrame(frame)}
+addEventListener('resize',()=>{size();if(RM)frame()});
+addEventListener('mousemove',e=>{mx=(e.clientX/innerWidth-.5)*2;my=(e.clientY/innerHeight-.5)*2;$('#stage').style.setProperty('--mx',mx);$('#stage').style.setProperty('--my',my)});
+setCol();size();frame();
+</script></body></html>
